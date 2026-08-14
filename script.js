@@ -4,6 +4,10 @@ const captureButton = document.getElementById("captureButton");
 
 let cameraStream = null;
 
+// Figma - Loading Avatar
+const FIGMA_URL =
+  "https://www.figma.com/proto/PKmXC8DJImXJUCg3TkTkRD/Turn-Me-Into-a-Netflix-Show?node-id=29-80&t=Vp4isEqp0TTz8fbj-0&scaling=scale-down&content-scaling=fixed&page-id=0%3A1";
+
 startButton.addEventListener("click", async () => {
 
   try {
@@ -34,6 +38,10 @@ startButton.addEventListener("click", async () => {
 
 captureButton.addEventListener("click", () => {
 
+  // Prevent double tap
+  captureButton.disabled = true;
+
+  // Create camera flash
   const flash = document.createElement("div");
 
   flash.style.position = "fixed";
@@ -47,6 +55,7 @@ captureButton.addEventListener("click", () => {
 
   captureButton.style.display = "none";
 
+  // Stop camera
   if (cameraStream) {
 
     cameraStream.getTracks().forEach(track => {
@@ -54,17 +63,18 @@ captureButton.addEventListener("click", () => {
     });
 
     cameraStream = null;
-
   }
 
   camera.srcObject = null;
 
+  // Fade flash
   setTimeout(() => {
     flash.style.opacity = "0";
   }, 100);
 
+  // Go directly to Figma Loading Avatar
   setTimeout(() => {
-    flash.remove();
+    window.location.href = FIGMA_URL;
   }, 400);
 
 });
