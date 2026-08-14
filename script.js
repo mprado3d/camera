@@ -9,18 +9,11 @@ startButton.addEventListener("click", async () => {
   try {
 
     cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: {
-          ideal: "user"
-        }
-      },
+      video: true,
       audio: false
     });
 
     camera.srcObject = cameraStream;
-
-    // Important for Firefox
-    await camera.play();
 
     startButton.style.display = "none";
     captureButton.style.display = "block";
@@ -61,6 +54,7 @@ captureButton.addEventListener("click", () => {
     });
 
     cameraStream = null;
+
   }
 
   camera.srcObject = null;
