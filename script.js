@@ -10,20 +10,29 @@ startButton.addEventListener("click", async () => {
 
     cameraStream = await navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: "user"
+        facingMode: {
+          ideal: "user"
+        }
       },
       audio: false
     });
 
     camera.srcObject = cameraStream;
 
+    // Important for Firefox
+    await camera.play();
+
     startButton.style.display = "none";
     captureButton.style.display = "block";
 
   } catch (error) {
 
-    alert("Could not access camera.");
-    console.error(error);
+    console.error("Camera error:", error);
+
+    alert(
+      "Could not start camera.\n\n" +
+      error.name + ": " + error.message
+    );
 
   }
 
@@ -32,7 +41,6 @@ startButton.addEventListener("click", async () => {
 
 captureButton.addEventListener("click", () => {
 
-  // Camera flash
   const flash = document.createElement("div");
 
   flash.style.position = "fixed";
@@ -44,30 +52,25 @@ captureButton.addEventListener("click", () => {
 
   document.body.appendChild(flash);
 
-  // Hide shutter button
   captureButton.style.display = "none";
 
-  // Stop camera
   if (cameraStream) {
 
     cameraStream.getTracks().forEach(track => {
       track.stop();
     });
 
+    cameraStream = null;
   }
 
-  // Fade flash
+  camera.srcObject = null;
+
   setTimeout(() => {
-
     flash.style.opacity = "0";
-
   }, 100);
 
-  // Remove flash
   setTimeout(() => {
-
     flash.remove();
-
   }, 400);
 
 });
